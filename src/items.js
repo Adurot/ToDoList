@@ -1,14 +1,13 @@
 
 
 export class item {
-    constructor(title, description, dueDate, priority, height, width, index) {
+    constructor(title, description, dueDate, priority, index, list) {
         this.title=title;
         this.description= description;
         this.dueDate=dueDate;
         this.priority=priority;
-        this.height = height;
-        this.width = width;
         this.index=index;
+        this.list=list; //which list this belongs to.
     }
     // Getter
     get area() {
@@ -26,12 +25,12 @@ function calcArea(height, width) {
 
 }
 
-const square = new item(10, 10, 9, 8, 12, 6, 5);
+const square = new item(10, 10, 9, 8, 12, 6, 5, 'default');
 
 console.log(square.area); // 100
 
 
-const square3 = new item(10, 10, 9, 8, 12, 100, 5);
+const square3 = new item(10, 10, 9, 8, 12, 100, 5, 'default');
 
 
 

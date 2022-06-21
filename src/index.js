@@ -25,16 +25,32 @@ toDo[i] = new item(10, 10, 7, 'low', i, 'work');
 
 console.log(toDo[i].priority + " Due Date for " + i)
 
+
+let btn = document.createElement("button");
+btn.innerHTML = "Work";
+btn.onclick = function () {
+    clrList();
+    chooseList('work');
+  
+};
+document.body.appendChild(btn);
+
+function clrList(){
+let element = document.getElementById("container");
+while (element.firstChild) {
+  element.removeChild(element.firstChild);
+}
+}
 function pageLoad() {
 
-    let div = document.createElement("div");
-    div.id = "dtitle";
-    div.className = "title";
-    div.style = "background-color: blue;";
-    div.style.width = "1200px";
-    div.style.height = "100px";
-    div.innerHTML = "Version 1";
-    document.body.appendChild(div);
+    let divt = document.createElement("div");
+    divt.id = "dtitle";
+    divt.className = "title";
+    divt.style = "background-color: blue;";
+    divt.style.width = "1200px";
+    divt.style.height = "100px";
+    divt.innerHTML = "Version 1";
+    document.body.appendChild(divt);
 
     let h1 = document.createElement("h1");
 
@@ -44,11 +60,15 @@ function pageLoad() {
     h1.style.height = "20px";
     h1.innerHTML = "To Do List";
     document.getElementById("dtitle").appendChild(h1);
+
+    let container = document.createElement("div");
+    container.id = "container";
+    document.body.appendChild(container);
 }
 
 
 function listLoad() {
-
+    
 
     let div = document.createElement("div");
     div.id = "div" + toDo[j].index;
@@ -56,7 +76,7 @@ function listLoad() {
     div.style = "background-color: yellow;";
     div.style.width = "1200px";
     div.style.height = "400px";
-    document.body.appendChild(div);
+    document.getElementById("container").appendChild(div);
 
     let h3 = document.createElement("h4");
 
@@ -106,12 +126,12 @@ function listLoad() {
 }
 
 pageLoad();
-for (j = 0; j < toDo.length; j++) {
-    if (toDo[j].list == 'default') { listLoad(); }
-}
+chooseList('default');
 
-function chooseList(){
-
+function chooseList(listType){
+    for (j = 0; j < toDo.length; j++) {
+        if (toDo[j].list == listType) { listLoad(); }
+    }
     
 }
 

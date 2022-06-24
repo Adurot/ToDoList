@@ -1,10 +1,11 @@
 
 
 export class item {
-    constructor(title, description, dueDate, priority, index, list) {
+    constructor(title, description, dateAssigned, extraDays, priority, index, list) {
         this.title=title;
         this.description= description;
-        this.dueDate=dueDate;
+        this.dateAssigned=dateAssigned;
+        this.extraDays=extraDays;
         this.priority=priority;
         this.index=index;
         this.list=list; //which list this belongs to.
@@ -36,4 +37,4 @@ const square3 = new item(10, 10, 9, 8, 12, 100, 5, 'default');
 
 console.log(square3.area+ "square 3 area"); // 100
 
-console.log(square3.dueDate+ "due date")
+console.log(square3.dateAssigned+ "due date")

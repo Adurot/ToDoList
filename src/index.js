@@ -1,45 +1,90 @@
 
 //import {trick} from './magic.js'
-import { compareAsc, format } from 'date-fns'
+import { addDays, compareAsc, format } from 'date-fns'
 import { item } from './items.js'
-// Item attributes: title, description, dueDate, priority, index, list
+// Item attributes: title, description, dateAssigned, extraDays, priority, index, list
 
 
 
 let i = 0;
 let j = 0;
-let taskTime=540;
+let taskTime = 540;
+let btnDue = [];
 const today = new Date();
 const due = new Date();
-due.setDate(today.getDate()+taskTime);
-const day= due.getDate();
-const month= due.getMonth()+1;
-const year= due.getFullYear();
+due.setDate(today.getDate() + taskTime);
+const day = due.getDate();
+const month = due.getMonth() + 1;
+const year = due.getFullYear();
 const toDo = [];
-toDo[i] = new item("Task Title", "Task Description", "Task Due Date", 'high', i, 'default');
+
+function dateAssigned(origDate, extraDays) {
+    const due = new Date();
+    due.setDate(origDate.getDate() + extraDays);
+    const day = due.getDate();
+    const month = due.getMonth() + 1;
+    const year = due.getFullYear();
+    return month + '/' + day + '/' + year
+}
+
+
+toDo[i] = new item("Task Title", "Task Description", new Date(), 0, 'high', i, 'default');
 
 i++;
-toDo[i] = new item(10, due, month+"/"+day+"/" + year, 'medium', i, 'default');
+toDo[i] = new item(10, due, new Date(), 3, 'medium', i, 'default');
 i++;
-toDo[i] = new item(10, 10, 7, 'low', i, 'work');
-
-console.log(toDo[i].priority + " Due Date for " + i)
-
+toDo[i] = new item(10, 10, new Date(), 2, 'low', i, 'work');
+i++;
+//console.log(toDo[i].priority + " Due Date for " + i)
+let listType = 'default';
 
 let btn = document.createElement("button");
-btn.innerHTML = "Work";
+let btnFin = [];
+btn.innerHTML = "Default";
 btn.onclick = function () {
+    listType = 'default';
     clrList();
-    chooseList('work');
-  
+    chooseList(listType);
+
 };
 document.body.appendChild(btn);
 
-function clrList(){
-let element = document.getElementById("container");
-while (element.firstChild) {
-  element.removeChild(element.firstChild);
-}
+let btnWork = document.createElement("button");
+btnWork.innerHTML = "Work";
+btnWork.onclick = function () {
+    listType = 'work';
+    clrList();
+    chooseList(listType);
+
+};
+document.body.appendChild(btnWork);
+
+let btnChores = document.createElement("button");
+btnChores.innerHTML = "Chores";
+btnChores.onclick = function () {
+    listType = 'chores';
+    clrList();
+    chooseList(listType);
+
+};
+document.body.appendChild(btnChores);
+
+let btnFinishesd = document.createElement("button");
+btnFinishesd.innerHTML = "Finished";
+btnFinishesd.onclick = function () {
+    listType = 'finished';
+    clrList();
+    chooseList(listType);
+
+};
+document.body.appendChild(btnFinishesd);
+
+
+function clrList() {
+    let element = document.getElementById("container");
+    while (element.firstChild) {
+        element.removeChild(element.firstChild);
+    }
 }
 function pageLoad() {
 
@@ -48,9 +93,10 @@ function pageLoad() {
     divt.className = "title";
     divt.style = "background-color: blue;";
     divt.style.width = "1200px";
-    divt.style.height = "100px";
+    divt.style.height = "120px";
     divt.innerHTML = "Version 1";
     document.body.appendChild(divt);
+
 
     let h1 = document.createElement("h1");
 
@@ -58,17 +104,29 @@ function pageLoad() {
 
     h1.style.width = "500px";
     h1.style.height = "20px";
-    h1.innerHTML = "To Do List";
+    h1.innerHTML = "To Do List <br>";
     document.getElementById("dtitle").appendChild(h1);
 
     let container = document.createElement("div");
     container.id = "container";
     document.body.appendChild(container);
+
+
+    let btnChores = document.createElement("button");
+    btnChores.innerHTML = "Chores";
+    btnChores.onclick = function () {
+        listType = 'chores';
+        clrList();
+        chooseList(listType);
+
+    };
+    document.getElementById(h1.id).appendChild(btnChores);
 }
 
 
+
 function listLoad() {
-    
+
 
     let div = document.createElement("div");
     div.id = "div" + toDo[j].index;
@@ -80,13 +138,26 @@ function listLoad() {
 
     let h3 = document.createElement("h4");
 
-    h3.id = "title" + toDo[j].index;
+    h3.id = toDo[j].index;
+
+
 
     h3.style.width = "300px";
     h3.style.height = "50px";
-    h3.innerHTML = "<span>Item number</span> <br>" + toDo[j].index+"<br> <span><u>Title</u></span><br>" + toDo[j].title;
+    h3.innerHTML = "<span>Item number</span> <br>" + toDo[j].index + "<br> <span><u>Title</u></span><br>" + toDo[j].title;
     document.getElementById("div" + toDo[j].index).appendChild(h3);
     h3.style = "background-color: lightgreen;";
+
+    btnFin[h3.id] = document.createElement("button");
+    btnFin[h3.id].innerHTML = "Mark as Finished";
+    btnFin[h3.id].onclick = function () {
+        toDo[h3.id].list = "finished";
+
+        clrList();
+        chooseList(listType);
+
+    };
+    document.getElementById(h3.id).appendChild(btnFin[h3.id]);
 
 
     let h4 = document.createElement("h4");
@@ -99,12 +170,32 @@ function listLoad() {
 
     let hDue = document.createElement("h4");
 
-    hDue.id = "title" + toDo[j].index;
+    hDue.id = "hDue" + toDo[j].index;
 
     hDue.style.width = "300px";
     hDue.style.height = "50px";
-    hDue.innerHTML = "<br> <span>Due Date</span><br>" + toDo[j].dueDate;
+    hDue.innerHTML = "<br> <span>Due Date</span><br>" + dateAssigned(toDo[j].dateAssigned, toDo[j].extraDays);
     document.getElementById("div" + toDo[j].index).appendChild(hDue);
+    //adds time to due date
+    btnDue[j] = document.createElement("button");
+    btnDue[j].innerHTML = "Add a Day";
+
+    btnDue[j].addEventListener('click', () => {
+        // When there is a "click"
+        // it shows an alert in the browser
+
+        toDo[h3.id].extraDays++;
+
+
+        clrList();
+        chooseList(listType);
+
+    });
+    document.getElementById("hDue" + toDo[j].index).appendChild(btnDue[j]);
+
+    function addDays() {
+        alert(toDo[j].extraDays)
+    }
 
 
     let hpriority = document.createElement("h4");
@@ -122,17 +213,17 @@ function listLoad() {
     hlist.style.height = "50px";
     hlist.innerHTML = "<br> <span>List</span> for number " + toDo[j].index + " To Do is " + toDo[j].list;
     document.getElementById("div" + toDo[j].index).appendChild(hlist);
-    
+
 }
 
 pageLoad();
 chooseList('default');
 
-function chooseList(listType){
+function chooseList(listType) {
     for (j = 0; j < toDo.length; j++) {
         if (toDo[j].list == listType) { listLoad(); }
     }
-    
+
 }
 
 let place = "spacestation";
@@ -150,7 +241,7 @@ const square3 = new item(10, 10, 9, 8, 12, 100, 5);
 
 console.log(square3.area + "square 3 area"); // 100
 
-console.log(square3.dueDate + "due date")
+console.log(square3.dateAssigned + "due date")
 
 
 const square = new item(10, 10);

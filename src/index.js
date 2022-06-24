@@ -10,6 +10,10 @@ let i = 0;
 let j = 0;
 let taskTime = 540;
 let btnDue = [];
+let btnMinus = [];
+let btnHigh = [];
+let btnMed = [];
+let btnLow = [];
 const today = new Date();
 const due = new Date();
 due.setDate(today.getDate() + taskTime);
@@ -28,12 +32,12 @@ function dateAssigned(origDate, extraDays) {
 }
 
 
-toDo[i] = new item("Task Title", "Task Description", new Date(), 0, 'high', i, 'default');
+toDo[i] = new item("Task Title", "Task Description", new Date(), 0, 'High', i, 'default');
 
 i++;
-toDo[i] = new item(10, due, new Date(), 3, 'medium', i, 'default');
+toDo[i] = new item(10, due, new Date(), 3, 'Medium', i, 'default');
 i++;
-toDo[i] = new item(10, 10, new Date(), 2, 'low', i, 'work');
+toDo[i] = new item(10, 10, new Date(), 2, 'Low', i, 'work');
 i++;
 //console.log(toDo[i].priority + " Due Date for " + i)
 let listType = 'default';
@@ -69,15 +73,30 @@ btnChores.onclick = function () {
 };
 document.body.appendChild(btnChores);
 
-let btnFinishesd = document.createElement("button");
-btnFinishesd.innerHTML = "Finished";
-btnFinishesd.onclick = function () {
+let btnFinished = document.createElement("button");
+btnFinished.innerHTML = "Finished";
+btnFinished.onclick = function () {
     listType = 'finished';
     clrList();
     chooseList(listType);
 
 };
-document.body.appendChild(btnFinishesd);
+document.body.appendChild(btnFinished);
+
+let btnNewList = document.createElement("button");
+btnNewList.innerHTML = "New List";
+btnNewList.onclick = function () {
+    let btnFinished = document.createElement("button");
+    btnFinished.innerHTML = "Custom";
+    btnFinished.onclick = function () {
+        listType = 'finished';
+        clrList();
+        chooseList(listType);
+
+    };
+    document.body.appendChild(btnFinished);
+};
+document.body.appendChild(btnNewList);
 
 
 function clrList() {
@@ -112,15 +131,19 @@ function pageLoad() {
     document.body.appendChild(container);
 
 
-    let btnChores = document.createElement("button");
-    btnChores.innerHTML = "Chores";
-    btnChores.onclick = function () {
-        listType = 'chores';
+    let btnAddToDo = document.createElement("button");
+    btnAddToDo.innerHTML = "Add a Task";
+    btnAddToDo.onclick = function () {
+        var name = prompt("Name of new task?");
+        var description = prompt("Description (optional)");
+        toDo[i] = new item(name, description, new Date(), 0, 'Medium', i, listType);
+
+        i++;
         clrList();
         chooseList(listType);
 
     };
-    document.getElementById(h1.id).appendChild(btnChores);
+    document.getElementById(h1.id).appendChild(btnAddToDo);
 }
 
 
@@ -193,6 +216,22 @@ function listLoad() {
     });
     document.getElementById("hDue" + toDo[j].index).appendChild(btnDue[j]);
 
+    btnMinus[j] = document.createElement("button");
+    btnMinus[j].innerHTML = "Subtract a Day";
+
+    btnMinus[j].addEventListener('click', () => {
+        // When there is a "click"
+        // it shows an alert in the browser
+
+        toDo[h3.id].extraDays--;
+
+
+        clrList();
+        chooseList(listType);
+
+    });
+    document.getElementById("hDue" + toDo[j].index).appendChild(btnMinus[j]);
+
     function addDays() {
         alert(toDo[j].extraDays)
     }
@@ -203,8 +242,57 @@ function listLoad() {
 
     hpriority.style.width = "300px";
     hpriority.style.height = "50px";
-    hpriority.innerHTML = "<br> <span>Priority</span><br>" + toDo[j].index + " To Do is " + toDo[j].priority;
+    hpriority.innerHTML = "<br> <span>Priority</span><br>" + toDo[j].priority + "<br>";
     document.getElementById("div" + toDo[j].index).appendChild(hpriority);
+
+    btnHigh[j] = document.createElement("button");
+    btnHigh[j].innerHTML = "High";
+
+    btnHigh[j].addEventListener('click', () => {
+        // When there is a "click"
+        // it shows an alert in the browser
+
+        toDo[h3.id].priority = 'High';
+
+
+        clrList();
+        chooseList(listType);
+
+    });
+    document.getElementById("<span>description</span><br>" + toDo[j].index).appendChild(btnHigh[j]);
+
+    btnMed[j] = document.createElement("button");
+    btnMed[j].innerHTML = "Medium";
+
+    btnMed[j].addEventListener('click', () => {
+        // When there is a "click"
+        // it shows an alert in the browser
+
+        toDo[h3.id].priority = 'Medium';
+
+
+        clrList();
+        chooseList(listType);
+
+    });
+    document.getElementById("<span>description</span><br>" + toDo[j].index).appendChild(btnMed[j]);
+
+    btnLow[j] = document.createElement("button");
+    btnLow[j].innerHTML = "Low";
+
+    btnLow[j].addEventListener('click', () => {
+        // When there is a "click"
+        // it shows an alert in the browser
+
+        toDo[h3.id].priority = 'Low';
+
+
+        clrList();
+        chooseList(listType);
+
+    });
+    document.getElementById("<span>description</span><br>" + toDo[j].index).appendChild(btnLow[j]);
+
 
     let hlist = document.createElement("h4");
     hlist.id = "description" + toDo[j].index;

@@ -177,22 +177,9 @@ btnFinished.onclick = function () {
 
 };
 
+//let listOfLists = ["Default", "Custom", "Work", "Chores", "Finished"]
 
-let btnNewList = document.createElement("button");
-btnNewList.innerHTML = "New List";
-btnNewList.onclick = function () {
-    var list = prompt("Name of new list?");
-    let btnCustom = document.createElement("button");
-    btnCustom.innerHTML = list;
-    btnCustom.onclick = function () {
-        listType = list;
-        clrList();
-        chooseList(listType);
 
-    };
-
-    document.getElementById("title").appendChild(btnCustom);
-};
 
 
 
@@ -455,12 +442,77 @@ function chooseList(listType) {
 
 }
 
+//list button appending and custom lists
 
 document.getElementById("title").appendChild(btn);
 document.getElementById("title").appendChild(btnWork);
 document.getElementById("title").appendChild(btnChores);
 document.getElementById("title").appendChild(btnFinished);
-document.getElementById("title").appendChild(btnNewList);
+
+let listOfLists = ["Fun"]
+
+
+for (let m = 0; m < localStorage.getItem('noLists'); m++) {
+
+    if (localStorage.getItem('listName' + m) !== undefined);
+    {
+        listOfLists[m] = localStorage.getItem('listName' + m)
+    }
+}
+let btnList
+for (let n=0; n<localStorage.getItem('noLists');n++){
+createList(listOfLists[n])
+}
+
+function createList(listName) {
+    btnList = document.createElement("button");
+    btnList.innerHTML = listName;
+    btnList.onclick = function () {
+        listType = listName;
+        clrList();
+        chooseList(listType);
+
+    };
+
+    document.getElementById("title").appendChild(btnList);
+}
+
+let btnNewList = document.createElement("button");
+btnNewList.innerHTML = "New List";
+btnNewList.onclick = function () {
+    var list = prompt("Name of new list?");
+    let btnCustom = document.createElement("button");
+    btnCustom.innerHTML = list;
+    if (!listOfLists.includes(list)) {
+        // ✅ only runs if value not in array
+        listOfLists.push(list);
+        localStorage.setItem('numberLists', listOfLists.length);
+
+        for (let m = 0; m < listOfLists.length; m++) {
+            localStorage.setItem('listName' + m, listOfLists[m]);
+            localStorage.setItem('noLists', m+1);
+        }
+
+    }
+        btnCustom.onclick = function () {
+            listType = list;
+            console.log(typeof (list));
+            clrList();
+            chooseList(listType);
+
+
+
+        };
+        console.log(listOfLists)
+
+        document.getElementById("title").appendChild(btnCustom);
+    };
+
+
+
+
+
+    document.getElementById("title").appendChild(btnNewList);
 
  //localStorage.setItem('list', toDo[1].value);
  //localStorage.setItem('toDo', toDo[1]);
